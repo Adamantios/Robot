@@ -9,8 +9,6 @@ public abstract class Behavior {
 
     static final double TRANSLATIONAL_VELOCITY = 0.35;
 
-    static final double ROTATIONAL_VELOCITY = Math.PI * 2;
-
     Behavior(Sensors sensors) {
         this.sensors = sensors;
     }

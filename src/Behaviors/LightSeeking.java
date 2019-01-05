@@ -24,11 +24,11 @@ public class LightSeeking extends Behavior {
             prevLuminance = currentLuminance;
         else if (prevLuminance > currentLuminance) {
             prevLuminance = currentLuminance;
-            return new Velocities(TRANSLATIONAL_VELOCITY, ROTATIONAL_VELOCITY);
+            return new Velocities(TRANSLATIONAL_VELOCITY, Math.PI);
         }
 
         // Τurn towards light.
-        double rotationalVelocity = (lLum - rLum) * ROTATIONAL_VELOCITY;
+        double rotationalVelocity = (lLum - rLum) * Math.PI * 4;
 
         return new Velocities(TRANSLATIONAL_VELOCITY, rotationalVelocity);
     }
