@@ -21,11 +21,11 @@ public class SensorsInterpreter {
         return Math.pow(lux, 0.1);
     }
 
-    public static double luxToLuminance(double lLux, double rLux) {
-        double lLum = luxToLuminance(lLux);
-        double rLum = luxToLuminance(rLux);
+    public static double luxToLuminance(double lux1, double lux2) {
+        double lum1 = luxToLuminance(lux1);
+        double lum2 = luxToLuminance(lux2);
 
-        return (lLum + rLum) / 2.0;
+        return (lum1 + lum2) / 2.0;
     }
 
     public static int getMinSonarIndex(RangeSensorBelt sonars) {
