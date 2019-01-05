@@ -98,10 +98,6 @@ public class Robot extends Agent {
         }
     }
 
-    public Sensors getSensors() {
-        return sensors;
-    }
-
     @Override
     public String toString() {
         return "[BehaviorBasedAgent: behaviors=" + Arrays.toString(behaviors) + ", " +
