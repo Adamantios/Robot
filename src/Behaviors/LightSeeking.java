@@ -18,10 +18,9 @@ public class LightSeeking extends Behavior {
         double rLum = SensorsInterpreter.luxToLuminance(rLux);
         double lLum = SensorsInterpreter.luxToLuminance(lLux);
 
-        double translationalVelocity = TRANSLATIONAL_VELOCITY / (lLum + rLum);
         double rotationalVelocity = (lLum - rLum) * ROTATIONAL_VELOCITY;
 
-        return new Velocities(translationalVelocity, rotationalVelocity);
+        return new Velocities(TRANSLATIONAL_VELOCITY, rotationalVelocity);
     }
 
     @Override
