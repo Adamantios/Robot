@@ -10,11 +10,11 @@ public class GoStraight extends Behavior {
 
     @Override
     public Velocities act() {
-        return null;
+        return new Velocities(TRANSLATIONAL_VELOCITY, 0.0);
     }
 
     @Override
     public boolean isActive() {
-        return false;
+        return true;
     }
 }
