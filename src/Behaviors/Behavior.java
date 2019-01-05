@@ -9,7 +9,7 @@ public abstract class Behavior {
 
     private static final int ROTATION_COUNT = 20;
 
-    protected static final double TRANSLATIONAL_VELOCITY = 0.4;
+    private static final double TRANSLATIONAL_VELOCITY = 0.4;
 
     Behavior(Sensors sensors) {
         this.sensors = sensors;
@@ -30,5 +30,9 @@ public abstract class Behavior {
 
     public static int getRotationCount() {
         return ROTATION_COUNT;
+    }
+
+    public static double getTranslationalVelocity() {
+        return TRANSLATIONAL_VELOCITY;
     }
 }
