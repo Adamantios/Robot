@@ -42,8 +42,5 @@ class Environment extends EnvironmentDescription {
         this.light1Color = new Color3f(1, 0, 0);
         this.light1Position = new Vector3d(6, 0, 6);
         this.light2Position = new Vector3d(6, 3, 6);
-
-        // Add robot.
-        this.add(new Robot(new Vector3d(0.0D, 0.0D, 0.0D), "Manos Panos robot"));
     }
 }
