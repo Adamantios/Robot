@@ -21,10 +21,7 @@ public class LineFollowing extends Behavior {
             k++;
         }
 
-        if (left == 0 && right == 0)
-            return new Velocities(0, 0);
-        else
-            return new Velocities(0, (left - right) / k * 5);
+        return new Velocities(TRANSLATIONAL_VELOCITY, (left - right) / k * 5);
     }
 
     @Override
