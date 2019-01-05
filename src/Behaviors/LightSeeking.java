@@ -5,8 +5,6 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
-    private static final double LUMINANCE_SEEKING_MIN = 0.08;
-
     public LightSeeking(Sensors sensors) {
         super(sensors);
     }
@@ -28,12 +26,7 @@ public class LightSeeking extends Behavior {
 
     @Override
     public boolean isActive() {
-        double lLux = getSensors().getLightL().getLux();
-        double rLux = getSensors().getLightR().getLux();
-        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
-
-        // Seek light only if it's near.
-        return currentLuminance > LUMINANCE_SEEKING_MIN;
+        return true;
     }
 
     /**

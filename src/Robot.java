@@ -45,15 +45,13 @@ public class Robot extends Agent {
                 new ReachGoal(sensors),
                 new Avoidance(sensors, this.getRadius()),
                 new LineFollowing(sensors),
-                new LightSeeking(sensors),
-                new GoStraight(sensors)
+                new LightSeeking(sensors)
         };
         subsumes = new boolean[][]{
-                {false, true, true, true, true},
-                {false, false, true, true, true},
-                {false, false, false, true, true},
-                {false, false, false, false, true},
-                {false, false, false, false, false}};
+                {false, true, true, true},
+                {false, false, true, true},
+                {false, false, false, true},
+                {false, false, false, false}};
     }
 
     @Override
