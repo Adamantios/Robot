@@ -34,4 +34,23 @@ public class SensorsInterpreter {
 
         return (lLum + rLum) / 2.0;
     }
+
+    public static int getMinSonarIndex(RangeSensorBelt sonars) {
+        int min = 0;
+        for (int i = 1; i < sonars.getNumSensors(); i++) {
+            if (sonars.getMeasurement(i) < sonars.getMeasurement(min))
+                min = i;
+        }
+
+        return min;
+    }
+
+    public static double getMinSonar(RangeSensorBelt sonars) {
+        double min = Double.POSITIVE_INFINITY;
+        for (int i = 0; i < sonars.getNumSensors(); i++)
+            if (sonars.getMeasurement(i) < min)
+                min = sonars.getMeasurement(i);
+
+        return min;
+    }
 }

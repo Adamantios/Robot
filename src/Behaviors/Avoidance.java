@@ -24,12 +24,10 @@ public class Avoidance extends Behavior {
     }
 
     public Velocities act() {
+        // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
-
-        int min = 0;
-        for (int i = 1; i < sonars.getNumSensors(); i++)
-            if (sonars.getMeasurement(i) < sonars.getMeasurement(min))
-                min = i;
+        // Get min sonar's index.
+        int min = SensorsInterpreter.getMinSonarIndex(sonars);
 
         Point3d p = SensorsInterpreter.getSensedPoint(robotRadius, sonars, min);
         double d = p.distance(new Point3d(0, 0, 0));
@@ -47,14 +45,12 @@ public class Avoidance extends Behavior {
     }
 
     public boolean isActive() {
+        // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
+        // Get minimum distance between robot and obstacles, according to sonars measurements.
+        double min = SensorsInterpreter.getMinSonar(sonars);
 
-        int min = 0;
-        for (int i = 1; i < sonars.getNumSensors(); i++)
-            if (sonars.getMeasurement(i) < sonars.getMeasurement(min))
-                min = i;
-
-        return getSensors().getBumpers().oneHasHit() || getSensors().getSonars().getMeasurement(min) <= START_DISTANCE;
+        return getSensors().getBumpers().oneHasHit() || min <= START_DISTANCE;
 
     }
 }
