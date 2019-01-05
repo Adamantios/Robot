@@ -2,6 +2,7 @@ package Behaviors;
 
 import Utilities.Sensors;
 import Utilities.Velocities;
+import simbad.sim.LineSensor;
 
 public class LineFollowing extends Behavior {
     public LineFollowing(Sensors sensors) {
@@ -10,11 +11,31 @@ public class LineFollowing extends Behavior {
 
     @Override
     public Velocities act() {
-        return null;
+        int left = 0, right = 0;
+        float k = 0;
+        LineSensor line = getSensors().getLine();
+
+        for (int i = 0; i < line.getNumSensors() / 2; i++) {
+            left += line.hasHit(i) ? 1 : 0;
+            right += line.hasHit(line.getNumSensors() - i - 1) ? 1 : 0;
+            k++;
+        }
+
+        if (left == 0 && right == 0)
+            return new Velocities(0, 0);
+        else
+            return new Velocities(0, (left - right) / k * 5);
     }
 
     @Override
     public boolean isActive() {
+        LineSensor line = getSensors().getLine();
+
+        for (int i = 0; i < line.getNumSensors(); i++) {
+            if (line.hasHit(i))
+                return true;
+        }
+
         return false;
     }
 }
