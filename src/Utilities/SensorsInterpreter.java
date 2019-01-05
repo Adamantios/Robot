@@ -25,7 +25,7 @@ public class SensorsInterpreter {
         double lum1 = luxToLuminance(lux1);
         double lum2 = luxToLuminance(lux2);
 
-        return (lum1 + lum2) / 2.0;
+        return (lum1 + lum2) / 2;
     }
 
     public static int getMinSonarIndex(RangeSensorBelt sonars) {
