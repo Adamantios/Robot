@@ -13,8 +13,8 @@ public class Avoidance extends Behavior {
     private static final double K1 = 5;
     private static final double K2 = 0.8;
     private static final double K3 = 1;
-    private static final double START_DISTANCE = 0.4;
-    private static final double SAFETY_DISTANCE = 0.6;
+    private static final double START_DISTANCE = 0.6;
+    private static final double SAFETY_DISTANCE = 0.8;
 
     private float robotRadius;
 
