@@ -44,8 +44,8 @@ public class Robot extends Agent {
         behaviors = new Behavior[]{
                 new ReachGoal(sensors),
                 new Avoidance(sensors),
-                new LightSeeking(sensors),
                 new LineFollowing(sensors),
+                new LightSeeking(sensors),
                 new GoStraight(sensors)
         };
         suppresses = new boolean[][]{
