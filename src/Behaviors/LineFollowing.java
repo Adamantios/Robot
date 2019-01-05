@@ -26,6 +26,8 @@ public class LineFollowing extends Behavior {
 
     @Override
     public boolean isActive() {
+        // TODO return false when luminance is being minimised.
+
         LineSensor line = getSensors().getLine();
 
         for (int i = 0; i < line.getNumSensors(); i++) {
