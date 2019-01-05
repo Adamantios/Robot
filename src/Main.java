@@ -4,7 +4,7 @@ import javax.vecmath.Vector3d;
 
 public class Main {
     /**
-     * @param args the command line arguments
+     * @param args the command line arguments.
      */
     public static void main(String[] args) {
         // Create robot.
