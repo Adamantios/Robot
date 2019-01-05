@@ -15,14 +15,7 @@ public class ReachGoal extends Behavior {
     }
 
     public boolean isActive() {
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
-
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
-
-        double currentLuminance = (lLum + rLum) / 2.0;
-
+        double currentLuminance = getSensors().getAverageLuminance();
         return currentLuminance >= LUMINANCE_STOP_POINT;
     }
 }

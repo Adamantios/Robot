@@ -12,14 +12,12 @@ public class LightSeeking extends Behavior {
 
     @Override
     public Velocities act() {
-        // Τurn towards light
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
+        double lLum = getSensors().getLeftLuminance();
+        double rLum = getSensors().getRightLuminance();
 
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
-
+        // Move towards light.
         double translationalVelocity = TRANSLATIONAL_VELOCITY / (lLum + rLum);
+        // Τurn towards light.
         double rotationalVelocity = (lLum - rLum) * ROTATIONAL_VELOCITY;
 
         return new Velocities(translationalVelocity, rotationalVelocity);
@@ -27,19 +25,13 @@ public class LightSeeking extends Behavior {
 
     @Override
     public boolean isActive() {
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
-
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
-
-        double currentLuminance = (lLum + rLum) / 2.0;
-
+        // Get current average luminance.
+        double currentLuminance = getSensors().getAverageLuminance();
         // Seek light only if it's near.
         return currentLuminance > LUMINANCE_SEEKING_MIN;
     }
 
-    /*
+    /**
      * Returns a description of this behavior.
      */
     @Override
