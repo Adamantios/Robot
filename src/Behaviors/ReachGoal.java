@@ -11,7 +11,7 @@ public class ReachGoal extends Behavior {
     }
 
     public Velocities act() {
-        return new Velocities(0.0, 0.0);
+        return new Velocities(0, 0);
     }
 
     public boolean isActive() {
