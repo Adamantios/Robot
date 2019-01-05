@@ -5,7 +5,7 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
-    private static final double LUMINANCE_SEEKING_MIN = 0.1;
+    private static final double LUMINANCE_SEEKING_MIN = 0.08;
 
     public LightSeeking(Sensors sensors) {
         super(sensors);
