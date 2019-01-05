@@ -7,9 +7,11 @@ import simbad.sim.LineSensor;
 
 public class LineFollowing extends Behavior {
     private static final float MIN_LUMINANCE = 0.2F;
+    private double prevLuminance;
 
     public LineFollowing(Sensors sensors) {
         super(sensors);
+        prevLuminance = 0;
     }
 
     @Override
@@ -25,13 +27,19 @@ public class LineFollowing extends Behavior {
 
     @Override
     public boolean isActive() {
-        // TODO return false when luminance is being minimised.
         double lLux = getSensors().getLightL().getLux();
         double rLux = getSensors().getLightR().getLux();
         double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
 
         if (currentLuminance < MIN_LUMINANCE)
             return false;
+
+        if (prevLuminance == 0)
+            prevLuminance = currentLuminance;
+        else if (prevLuminance > currentLuminance) {
+            prevLuminance = currentLuminance;
+            return false;
+        }
 
         LineSensor line = getSensors().getLine();
 
