@@ -43,7 +43,7 @@ public class Robot extends Agent {
     private void initState() {
         behaviors = new Behavior[]{
                 new ReachGoal(sensors),
-                new Avoidance(sensors),
+                new Avoidance(sensors, this.getRadius()),
                 new LineFollowing(sensors),
                 new LightSeeking(sensors),
                 new GoStraight(sensors)
