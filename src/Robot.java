@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class Robot extends Agent {
     private Behavior[] behaviors;
-    private boolean[][] suppresses;
+    private boolean[][] subsumes;
     private int currentBehaviorIndex;
     private Sensors sensors;
 
@@ -48,7 +48,7 @@ public class Robot extends Agent {
                 new LightSeeking(sensors),
                 new GoStraight(sensors)
         };
-        suppresses = new boolean[][]{
+        subsumes = new boolean[][]{
                 {false, true, true, true, true},
                 {false, false, true, true, true},
                 {false, false, false, true, true},
@@ -74,8 +74,8 @@ public class Robot extends Agent {
             boolean runCurrentBehavior = isActive[currentBehaviorIndex];
 
             if (runCurrentBehavior) {
-                for (int i = 0; i < suppresses.length; i++) {
-                    if (isActive[i] && suppresses[i][currentBehaviorIndex]) {
+                for (int i = 0; i < subsumes.length; i++) {
+                    if (isActive[i] && subsumes[i][currentBehaviorIndex]) {
                         runCurrentBehavior = false;
                         break;
                     }
@@ -105,7 +105,7 @@ public class Robot extends Agent {
     @Override
     public String toString() {
         return "[BehaviorBasedAgent: behaviors=" + Arrays.toString(behaviors) + ", " +
-                "suppresses=" + Arrays.deepToString(suppresses) + ", " +
+                "subsumes=" + Arrays.deepToString(subsumes) + ", " +
                 "currentBehaviorIndex=" + currentBehaviorIndex + ", " +
                 "sensors=" + sensors + ", " + super.toString() + "]";
     }
