@@ -1,6 +1,7 @@
 package Behaviors;
 
 import Utilities.Sensors;
+import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
@@ -13,11 +14,11 @@ public class LightSeeking extends Behavior {
     @Override
     public Velocities act() {
         // Τurn towards light
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
+        double rLux = getSensors().getLightR().getLux();
+        double lLux = getSensors().getLightL().getLux();
 
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
+        double rLum = SensorsInterpreter.luxToLuminance(rLux);
+        double lLum = SensorsInterpreter.luxToLuminance(lLux);
 
         double translationalVelocity = TRANSLATIONAL_VELOCITY / (lLum + rLum);
         double rotationalVelocity = (lLum - rLum) * ROTATIONAL_VELOCITY;
@@ -27,13 +28,9 @@ public class LightSeeking extends Behavior {
 
     @Override
     public boolean isActive() {
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
-
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
-
-        double currentLuminance = (lLum + rLum) / 2.0;
+        double lLux = getSensors().getLightL().getLux();
+        double rLux = getSensors().getLightR().getLux();
+        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
 
         // Seek light only if it's near.
         return currentLuminance > LUMINANCE_SEEKING_MIN;

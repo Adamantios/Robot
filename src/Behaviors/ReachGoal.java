@@ -1,6 +1,7 @@
 package Behaviors;
 
 import Utilities.Sensors;
+import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class ReachGoal extends Behavior {
@@ -15,13 +16,9 @@ public class ReachGoal extends Behavior {
     }
 
     public boolean isActive() {
-        double lLum = getSensors().getLightL().getLux();
-        double rLum = getSensors().getLightR().getLux();
-
-        lLum = (float) Math.pow(lLum, 0.1);
-        rLum = (float) Math.pow(rLum, 0.1);
-
-        double currentLuminance = (lLum + rLum) / 2.0;
+        double lLux = getSensors().getLightL().getLux();
+        double rLux = getSensors().getLightR().getLux();
+        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
 
         return currentLuminance >= LUMINANCE_STOP_POINT;
     }

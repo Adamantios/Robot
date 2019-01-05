@@ -23,4 +23,15 @@ public class SensorsInterpreter {
             return a + Math.PI * 2;
         return a;
     }
+
+    public static double luxToLuminance(double lux) {
+        return Math.pow(lux, 0.1);
+    }
+
+    public static double luxToLuminance(double lLux, double rLux) {
+        double lLum = luxToLuminance(lLux);
+        double rLum = luxToLuminance(rLux);
+
+        return (lLum + rLum) / 2.0;
+    }
 }
