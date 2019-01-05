@@ -29,10 +29,10 @@ public class LightSeeking extends Behavior {
     public boolean isActive() {
         float lLum = getSensors().getLightL().getAverageLuminance();
         float rLum = getSensors().getLightR().getAverageLuminance();
-        double luminance = (lLum + rLum) / 2.0;
+        double currentLuminance = (lLum + rLum) / 2.0;
 
         // Seek light only if it's near.
-        return luminance > LUMINANCE_SEEKING_MIN;
+        return currentLuminance > LUMINANCE_SEEKING_MIN;
     }
 
     /*
