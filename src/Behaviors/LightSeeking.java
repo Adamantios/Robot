@@ -27,8 +27,12 @@ public class LightSeeking extends Behavior {
 
     @Override
     public boolean isActive() {
-        float lLum = getSensors().getLightL().getAverageLuminance();
-        float rLum = getSensors().getLightR().getAverageLuminance();
+        double lLum = getSensors().getLightL().getLux();
+        double rLum = getSensors().getLightR().getLux();
+
+        lLum = (float) Math.pow(lLum, 0.1);
+        rLum = (float) Math.pow(rLum, 0.1);
+
         double currentLuminance = (lLum + rLum) / 2.0;
 
         // Seek light only if it's near.
