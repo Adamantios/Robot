@@ -19,7 +19,7 @@ public abstract class Behavior {
 
     public abstract boolean isActive();
 
-    protected Sensors getSensors() {
+    Sensors getSensors() {
         return sensors;
     }
 
