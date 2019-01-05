@@ -9,17 +9,20 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 public class Avoidance extends Behavior {
-    private static final boolean CLOCKWISE = true;
     private static final double K1 = 5;
     private static final double K2 = 0.8;
     private static final double K3 = 1;
     private static final double START_DISTANCE = 0.6;
     private static final double SAFETY_DISTANCE = 0.8;
 
+    private static boolean CLOCKWISE = true;
+
+    private double prevLuminance;
     private float robotRadius;
 
     public Avoidance(Sensors sensors, float robotRadius) {
         super(sensors);
+        prevLuminance = 0;
         this.robotRadius = robotRadius;
     }
 
@@ -34,6 +37,17 @@ public class Avoidance extends Behavior {
     }
 
     public Velocities act() {
+        double lLux = getSensors().getLightL().getLux();
+        double rLux = getSensors().getLightR().getLux();
+        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
+
+        if (prevLuminance == 0)
+            prevLuminance = currentLuminance;
+        else if (prevLuminance > currentLuminance) {
+            prevLuminance = currentLuminance;
+            CLOCKWISE = !CLOCKWISE;
+        }
+
         // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
         // Get min sonar's index.
