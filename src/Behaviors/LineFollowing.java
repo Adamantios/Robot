@@ -31,23 +31,29 @@ public class LineFollowing extends Behavior {
         double rLux = getSensors().getLightR().getLux();
         double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
 
+        // Do not follow the line if luminance is less than allowed.
         if (currentLuminance < MIN_LUMINANCE)
             return false;
 
+        // Set luminance if it hasn't been set.
         if (prevLuminance == 0)
             prevLuminance = currentLuminance;
         else if (prevLuminance > currentLuminance) {
             prevLuminance = currentLuminance;
+            // Do not follow the line if luminance is being minimised.
             return false;
         }
 
+        // Get line sensor.
         LineSensor line = getSensors().getLine();
 
+        // If any line sensor has been hit, activate behavior.
         for (int i = 0; i < line.getNumSensors(); i++) {
             if (line.hasHit(i))
                 return true;
         }
 
+        // If none of the above happens, do not activate behavior.
         return false;
     }
 }
