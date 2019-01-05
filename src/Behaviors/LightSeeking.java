@@ -5,11 +5,12 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
+    private double prevLuminance;
+
     public LightSeeking(Sensors sensors) {
         super(sensors);
+        prevLuminance = 0;
     }
-
-    private double prevLuminance = 0;
 
     @Override
     public Velocities act() {
