@@ -11,6 +11,7 @@ public class LightSeeking extends Behavior {
 
     @Override
     public Velocities act() {
+        // TODO turn 180 degrees if luminance is being decreased.
         // Τurn towards light
         double rLux = getSensors().getLightR().getLux();
         double lLux = getSensors().getLightL().getLux();
