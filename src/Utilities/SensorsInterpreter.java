@@ -1,5 +1,6 @@
 package Utilities;
 
+import simbad.sim.LineSensor;
 import simbad.sim.RangeSensorBelt;
 
 import javax.vecmath.Point3d;
@@ -44,5 +45,32 @@ public class SensorsInterpreter {
                 min = sonars.getMeasurement(i);
 
         return min;
+    }
+
+    public static final class LineSensorHalfs {
+        private int right;
+        private int left;
+
+        public LineSensorHalfs(LineSensor line) {
+            calcRightAndLeftHalfs(line);
+        }
+
+        public int getRight() {
+            return right;
+        }
+
+        public int getLeft() {
+            return left;
+        }
+
+        private void calcRightAndLeftHalfs(LineSensor line) {
+            right = 0;
+            left = 0;
+
+            for (int i = 0; i < line.getNumSensors() / 2; i++) {
+                left += line.hasHit(i) ? 1 : 0;
+                right += line.hasHit(line.getNumSensors() - i - 1) ? 1 : 0;
+            }
+        }
     }
 }
