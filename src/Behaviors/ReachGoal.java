@@ -4,7 +4,7 @@ import Utilities.Sensors;
 import Utilities.Velocities;
 
 public class ReachGoal extends Behavior {
-    private static final double LUMINANCE_STOP_POINT = 0.9;
+    private static final double LUMINANCE_STOP_POINT = 0.87;
 
     public ReachGoal(Sensors sensors) {
         super(sensors);
