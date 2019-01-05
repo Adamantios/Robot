@@ -16,14 +16,6 @@ public class SensorsInterpreter {
         return new Point3d(x, 0, z);
     }
 
-    public static double wrapToPi(double a) {
-        if (a > Math.PI)
-            return a - Math.PI * 2;
-        if (a <= -Math.PI)
-            return a + Math.PI * 2;
-        return a;
-    }
-
     public static double luxToLuminance(double lux) {
         return Math.pow(lux, 0.1);
     }

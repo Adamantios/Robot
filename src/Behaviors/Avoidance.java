@@ -23,6 +23,16 @@ public class Avoidance extends Behavior {
         this.robotRadius = robotRadius;
     }
 
+    private static double wrapToPi(double a) {
+        if (a > Math.PI)
+            return a - Math.PI * 2;
+
+        if (a <= -Math.PI)
+            return a + Math.PI * 2;
+
+        return a;
+    }
+
     public Velocities act() {
         // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
@@ -39,7 +49,7 @@ public class Avoidance extends Behavior {
         if (CLOCKWISE)
             phRot = -phRot;
 
-        double phRef = SensorsInterpreter.wrapToPi(phLin + phRot);
+        double phRef = wrapToPi(phLin + phRot);
 
         return new Velocities(K2 * Math.cos(phRef), K1 * phRef);
     }
