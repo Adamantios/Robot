@@ -8,7 +8,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // Create robot.
-        Robot robot = new Robot(new Vector3d(0.0D, 0.0D, 0.0D), "Manos Panos robot");
+        Robot robot = new Robot(new Vector3d(0.0D, 0.0D, 0.0D), "Manos Panos");
 
         // Create environment.
         Environment environment = new Environment();
