@@ -36,6 +36,7 @@ public class LineFollowing extends Behavior {
         int right = lineSensorHalfs.getRight();
         int left = lineSensorHalfs.getLeft();
 
+        // Follow the line only if the luminance is coming from the line's side.
         if (rLux > lLux && right > left)
             return true;
         else return rLux < lLux && right < left;
