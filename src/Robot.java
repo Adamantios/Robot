@@ -67,7 +67,7 @@ public class Robot extends Agent {
         double front_right = sensors.getSonars().getFrontRightQuadrantMeasurement();
         double front_left = sensors.getSonars().getFrontLeftQuadrantMeasurement();
         if (front_right > front_left && rLux > lLux)
-            Behavior.setCLOCKWISE(false);
+            Avoidance.setClockwise(false);
     }
 
     public void performBehavior() {

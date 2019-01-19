@@ -9,14 +9,8 @@ public abstract class Behavior {
 
     static final double TRANSLATIONAL_VELOCITY = 0.35;
 
-    static boolean CLOCKWISE = true;
-
     Behavior(Sensors sensors) {
         this.sensors = sensors;
-    }
-
-    public static void setCLOCKWISE(boolean CLOCKWISE) {
-        Behavior.CLOCKWISE = CLOCKWISE;
     }
 
     public abstract Velocities act();

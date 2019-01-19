@@ -15,6 +15,8 @@ public class Avoidance extends Behavior {
     private static final double START_DISTANCE = .4;//0.4
     private static final double SAFETY_DISTANCE = .7; //0.5
 
+    private static boolean clockwise = true;
+
     private double prevLuminance;
     private float robotRadius;
     private boolean completed;
@@ -30,6 +32,10 @@ public class Avoidance extends Behavior {
         prevLuminance = 0;
         beganAvoidance = false;
         this.robotRadius = robotRadius;
+    }
+
+    public static void setClockwise(boolean clockwise) {
+        Avoidance.clockwise = clockwise;
     }
 
     private static double wrapToPi(double a) {
@@ -55,11 +61,11 @@ public class Avoidance extends Behavior {
         int min = SensorsInterpreter.getMinSonarIndex(sonars);
         Point3d p = SensorsInterpreter.getSensedPoint(robotRadius, sonars, min);
         double distance = p.distance(new Point3d(0, 0, 0));
-        Vector3d vector = CLOCKWISE ? new Vector3d(-p.z, 0, p.x) : new Vector3d(p.z, 0, -p.x);
+        Vector3d vector = clockwise ? new Vector3d(-p.z, 0, p.x) : new Vector3d(p.z, 0, -p.x);
         double phLin = Math.atan2(vector.z, vector.x);
         double phRot = Math.atan(K3 * (distance - SAFETY_DISTANCE));
 
-        if (CLOCKWISE || (!sonars.hasHit(3) && sonars.hasHit(9)))
+        if (clockwise || (!sonars.hasHit(3) && sonars.hasHit(9)))
             phRot = -phRot;
 
         double phRef = wrapToPi(phLin + phRot);
