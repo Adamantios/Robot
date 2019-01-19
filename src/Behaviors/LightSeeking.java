@@ -5,11 +5,11 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
-    private double prevLuminance;
+    private double minLuminance;
 
     public LightSeeking(Sensors sensors) {
         super(sensors);
-        prevLuminance = 0;
+        minLuminance = 0;
     }
 
     /**
@@ -38,27 +38,31 @@ public class LightSeeking extends Behavior {
         double lLum = SensorsInterpreter.luxToLuminance(getSensors().getLightL().getLux());
         double currentLuminance = (rLum + lLum) / 2;
 
-        if (prevLuminance == 0)
+        if (minLuminance == 0)
             // Set the previous luminance.
-            prevLuminance = currentLuminance;
-        else if (prevLuminance > currentLuminance) {
-            // If the luminance is decreasing, tilt a bit,
-            // because the robot may be moving in the opposite direction.
-            prevLuminance = currentLuminance;
-            return new Velocities(TRANSLATIONAL_VELOCITY, Math.PI / 7);
-        }
+            minLuminance = currentLuminance;
 
         // Set rotational velocity, depending on the left and right luminance and init translational velocity.
         double rotationalVelocity = (lLum - rLum) * Math.PI * 4;
         double translationalVelocity = 0;
 
         // Τurn towards light and move only if the right luminance is almost equal with the left.
-        if (approximatelyEqual(lLum, rLum, .4) || approximatelyEqual(rLum, lLum, .4))
+        if (approximatelyEqual(lLum, rLum, .4) || approximatelyEqual(rLum, lLum, .4)) {
             translationalVelocity = TRANSLATIONAL_VELOCITY;
-        else {
+
+            if (minLuminance > currentLuminance) {
+                // Set previous luminance to current.
+                minLuminance = currentLuminance;
+
+                // If the luminance is decreasing, tilt towards light a bit,
+                // because the robot may be moving in the opposite direction.
+                rotationalVelocity = Math.PI / 7;
+                if (rLum > lLum)
+                    rotationalVelocity = -rotationalVelocity;
+            }
+        } else
             // Rotate a bit faster.
             rotationalVelocity *= 4;
-        }
 
         return new Velocities(translationalVelocity, rotationalVelocity);
     }
