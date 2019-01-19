@@ -21,8 +21,28 @@ public class LineFollowing extends Behavior {
                 new SensorsInterpreter.LineSensorHalfs(getSensors().getLine());
         int right = lineSensorHalfs.getRight();
         int left = lineSensorHalfs.getLeft();
+        double lLux = getSensors().getLightL().getLux();
+        double rLux = getSensors().getLightR().getLux();
 
-        return new Velocities(TRANSLATIONAL_VELOCITY, (double) (left - right) / numOfSensors * 5);
+        // Tilt a bit to reassure that the line is not perpendicular.
+        if (right == left && rLux <= lLux)
+            return new Velocities(TRANSLATIONAL_VELOCITY, Math.PI);
+        else if (right == left && rLux > lLux)
+            return new Velocities(TRANSLATIONAL_VELOCITY, -Math.PI);
+
+//        if (right > left && rLux > lLux)
+//            return new Velocities(TRANSLATIONAL_VELOCITY, -Math.PI / 2);
+//        else if (right < left && rLux < lLux) return new Velocities(TRANSLATIONAL_VELOCITY, Math.PI / 2);
+//        else return new Velocities(TRANSLATIONAL_VELOCITY, 0);
+
+        if (left == 0 && right >= 2 && lLux > rLux) {
+            return new Velocities(TRANSLATIONAL_VELOCITY, 0);
+        }
+
+        if (right == 0 && left >= 2 && rLux > lLux)
+            return new Velocities(TRANSLATIONAL_VELOCITY, 0);
+
+        return new Velocities(TRANSLATIONAL_VELOCITY, (double) (left - right) / (numOfSensors / 2D) * 4.8);
     }
 
     @Override
@@ -37,20 +57,20 @@ public class LineFollowing extends Behavior {
         int left = lineSensorHalfs.getLeft();
 
         // Follow the line only if the luminance is coming from the line's side.
-        if (rLux > lLux && right > left)
-            return true;
-        else return rLux < lLux && right < left;
+//        if (rLux > lLux && right > left)
+//            return true;
+//        else return rLux < lLux && right < left;
 
-//        // Get line sensor.
-//        LineSensor line = getSensors().getLine();
-//
-//        // If any line sensor has been hit, activate behavior.
-//        for (int i = 0; i < line.getNumSensors(); i++) {
-//            if (line.hasHit(i))
-//                return true;
-//        }
-//
-//        // If none of the above happens, do not activate behavior.
-//        return false;
+        // Get line sensor.
+        LineSensor line = getSensors().getLine();
+
+        // If any line sensor has been hit, activate behavior.
+        for (int i = 0; i < line.getNumSensors(); i++) {
+            if (line.hasHit(i))
+                return true;
+        }
+
+        // If none of the above happens, do not activate behavior.
+        return false;
     }
 }

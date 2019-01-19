@@ -10,19 +10,25 @@ import javax.vecmath.Vector3d;
 
 public class Avoidance extends Behavior {
     private static final double K1 = 5;
-    private static final double K2 = 0.8;
+    private static final double K2 = 0.5;
     private static final double K3 = 1;
-    private static final double START_DISTANCE = 0.6;
-    private static final double SAFETY_DISTANCE = 0.8;
-
-    private static boolean CLOCKWISE = true;
+    private static final double START_DISTANCE = .4;//0.4
+    private static final double SAFETY_DISTANCE = .7; //0.5
 
     private double prevLuminance;
     private float robotRadius;
+    private boolean completed;
+    private double initialLum;
+    private boolean circleCompleted;
+    private double hitPoint;
+    private double leavePoint;
+    private double bestPoint;
+    private boolean beganAvoidance;
 
     public Avoidance(Sensors sensors, float robotRadius) {
         super(sensors);
         prevLuminance = 0;
+        beganAvoidance = false;
         this.robotRadius = robotRadius;
     }
 
@@ -37,30 +43,23 @@ public class Avoidance extends Behavior {
     }
 
     public Velocities act() {
-        double lLux = getSensors().getLightL().getLux();
-        double rLux = getSensors().getLightR().getLux();
-        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
-
-        if (prevLuminance == 0)
-            prevLuminance = currentLuminance;
-        else if (prevLuminance > currentLuminance) {
-            prevLuminance = currentLuminance;
-            CLOCKWISE = !CLOCKWISE;
-        }
+        if (getSensors().getBumpers().getFrontQuadrantHits() > 0)
+            return new Velocities(-TRANSLATIONAL_VELOCITY * 8, Math.PI);
+        else if (getSensors().getBumpers().getBackQuadrantHits() > 0)
+            return new Velocities(TRANSLATIONAL_VELOCITY * 8, Math.PI);
 
         // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
+
         // Get min sonar's index.
         int min = SensorsInterpreter.getMinSonarIndex(sonars);
-
         Point3d p = SensorsInterpreter.getSensedPoint(robotRadius, sonars, min);
-        double d = p.distance(new Point3d(0, 0, 0));
-        Vector3d v;
-        v = CLOCKWISE ? new Vector3d(-p.z, 0, p.x) : new Vector3d(p.z, 0, -p.x);
-        double phLin = Math.atan2(v.z, v.x);
-        double phRot = Math.atan(K3 * (d - SAFETY_DISTANCE));
+        double distance = p.distance(new Point3d(0, 0, 0));
+        Vector3d vector = CLOCKWISE ? new Vector3d(-p.z, 0, p.x) : new Vector3d(p.z, 0, -p.x);
+        double phLin = Math.atan2(vector.z, vector.x);
+        double phRot = Math.atan(K3 * (distance - SAFETY_DISTANCE));
 
-        if (CLOCKWISE)
+        if (CLOCKWISE || (!sonars.hasHit(3) && sonars.hasHit(9)))
             phRot = -phRot;
 
         double phRef = wrapToPi(phLin + phRot);
@@ -69,12 +68,43 @@ public class Avoidance extends Behavior {
     }
 
     public boolean isActive() {
+        if (getSensors().getBumpers().oneHasHit())
+            return true;
+
+        SensorsInterpreter.LineSensorHalfs lineSensorHalfs =
+                new SensorsInterpreter.LineSensorHalfs(getSensors().getLine());
+        int right = lineSensorHalfs.getRight();
+        int left = lineSensorHalfs.getLeft();
+
         // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
+
+//        if (sonars.hasHit(3) && sonars.hasHit(9))
+//            return false;
+
+        // Do not avoid obstacles if there is free space from the line's direction.
+        for (int i = 0; i < getSensors().getLine().getNumSensors(); i++) {
+            if (left > 0 && sonars.getLeftQuadrantMeasurement() == 0 ||
+                    right > 0 && sonars.getRightQuadrantMeasurement() == 0)
+                return false;
+        }
+
         // Get minimum distance between robot and obstacles, according to sonars measurements.
         double min = SensorsInterpreter.getMinSonar(sonars);
 
-        return getSensors().getBumpers().oneHasHit() || min <= START_DISTANCE;
-
+        if (min <= START_DISTANCE && !beganAvoidance) {
+            beganAvoidance = true;
+            return true;
+        } else if (beganAvoidance) {
+            // If any line sensor has been hit, deactivate avoidance.
+            for (int i = 0; i < getSensors().getLine().getNumSensors(); i++) {
+                if (getSensors().getLine().hasHit(i)) {
+                    beganAvoidance = false;
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
