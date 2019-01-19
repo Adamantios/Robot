@@ -51,7 +51,7 @@ public class LightSeeking extends Behavior {
         // Τurn towards light and move only if the right luminance is almost equal with the left.
         double rotationalVelocity = (lLum - rLum) * Math.PI * 4;
         double translational;
-        if (approximatelyEqual(lLum, rLum, .4))
+        if (approximatelyEqual(lLum, rLum, .4) || approximatelyEqual(rLum, lLum, .4))
             translational = TRANSLATIONAL_VELOCITY;
         else {
             // Rotate a bit faster.
