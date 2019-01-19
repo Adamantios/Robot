@@ -57,6 +57,14 @@ public class Robot extends Agent {
     @Override
     protected void initBehavior() {
         currentBehaviorIndex = 0;
+
+        // Set anticlockwise rotation if the lux and the distance on the right are bigger.
+        double lLux = sensors.getLightL().getLux();
+        double rLux = sensors.getLightR().getLux();
+        double front_right = sensors.getSonars().getFrontRightQuadrantMeasurement();
+        double front_left = sensors.getSonars().getFrontLeftQuadrantMeasurement();
+        if (front_right > front_left && rLux > lLux)
+            Behavior.setCLOCKWISE(false);
     }
 
     public void performBehavior() {
@@ -82,6 +90,10 @@ public class Robot extends Agent {
 
             if (runCurrentBehavior) {
                 if (currentBehaviorIndex < behaviors.length) {
+//                    TODO remove
+//                    System.out.println("Running behavior " + behaviors[currentBehaviorIndex].toString());
+
+
                     Velocities newVelocities = behaviors[currentBehaviorIndex].act();
                     this.setTranslationalVelocity(newVelocities.getTranslationalVelocity());
                     this.setRotationalVelocity(newVelocities.getRotationalVelocity());
