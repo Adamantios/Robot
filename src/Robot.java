@@ -34,27 +34,32 @@ public class Robot extends Agent {
         // Add camera for the line sensors.
         CameraSensor camera = RobotFactory.addCameraSensor(this);
         camera.rotateZ(-Math.PI / 4);
-
-        initState();
     }
 
     private void initState() {
+        // Create behaviors.
         behaviors = new Behavior[]{
                 new ReachGoal(sensors),
                 new Avoidance(sensors, this.getRadius()),
                 new LineFollowing(sensors),
                 new LightSeeking(sensors)
         };
+
+        // Create subsumption matrix.
         subsumes = new boolean[][]{
                 {false, true, true, true},
                 {false, false, true, true},
                 {false, false, false, true},
                 {false, false, false, false}};
+
+        // Set current behavior to zero.
+        currentBehaviorIndex = 0;
     }
 
     @Override
     protected void initBehavior() {
-        currentBehaviorIndex = 0;
+        // Initialise behaviors and subsumption matrix.
+        initState();
 
         // Set anticlockwise rotation if the lux and the distance on the right are bigger.
         double lLux = sensors.getLightL().getLux();
