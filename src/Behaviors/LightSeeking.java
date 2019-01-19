@@ -5,7 +5,7 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 
 public class LightSeeking extends Behavior {
-    private final static float TOLERANCE_APPROXIMATION = .4F;
+    private final static float TOLERANCE_APPROXIMATION = .2F;
     private double minLuminance;
 
     public LightSeeking(Sensors sensors) {
