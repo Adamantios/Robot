@@ -29,7 +29,7 @@ public class LightSeeking extends Behavior {
         }
 
         // Τurn towards light.
-        double rotationalVelocity = (lLum - rLum) * Math.PI * 5;
+        double rotationalVelocity = (lLum - rLum) * Math.PI * 3;
 
         return new Velocities(TRANSLATIONAL_VELOCITY, rotationalVelocity);
     }
