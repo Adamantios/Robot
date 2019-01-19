@@ -12,6 +12,8 @@ public class Main {
 //        Robot robot = new Robot(new Vector3d(-7.5D, 0.0D, -5.5D), "Ma.Pa."); // top
         Robot robot = new Robot(new Vector3d(-8D, 0.0D, -6D), "Ma.Pa."); // top from line
 //        Robot robot = new Robot(new Vector3d(8.0D, 0.0D, 3.0D), "Ma.Pa."); // down
+//        Robot robot = new Robot(new Vector3d(5.0D, 0.0D, -8.0D), "Ma.Pa."); // right
+//        Robot robot = new Robot(new Vector3d(7.0D, 0.0D, 12.0D), "Ma.Pa."); // across the wall
 
         // Create environment.
         Environment environment = new Environment();
