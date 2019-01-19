@@ -12,16 +12,13 @@ public class ReachGoal extends Behavior {
     }
 
     public Velocities act() {
+        // Stop moving.
         return new Velocities(0, 0);
     }
 
     public boolean isActive() {
-        double lLux = getSensors().getLightL().getLux();
-        double rLux = getSensors().getLightR().getLux();
-        double currentLuminance = SensorsInterpreter.luxToLuminance(rLux, lLux);
-//TODO remove
-//        System.out.println(currentLuminance);
-
-        return currentLuminance >= LUMINANCE_STOP_POINT;
+        // If current luminance is equal or larger than the stop point, activate reach goal behavior.
+        return SensorsInterpreter.luxToLuminance(getSensors().getLightR().getLux(), getSensors().getLightL().getLux())
+                >= LUMINANCE_STOP_POINT;
     }
 }

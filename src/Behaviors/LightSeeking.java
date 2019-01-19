@@ -12,7 +12,6 @@ public class LightSeeking extends Behavior {
         prevLuminance = 0;
     }
 
-
     /**
      * Determine whether two numbers are approximately equal
      * by seeing if they are within a certain tolerance percentage.
@@ -20,50 +19,53 @@ public class LightSeeking extends Behavior {
      * @param desiredValue        the value to be checked for approximation.
      * @param actualValue         the actual value.
      * @param tolerancePercentage the tolerance value. -> 1 = 1%, 2.5 = 2.5%, etc.
-     * @return true if the desiredValue is approximately equal with the actualValue, within the tolerancePercentage.
-     * Otherwise false.
+     * @return true if the desiredValue is approximately equal with the actualValue, within the tolerancePercentage,
+     * otherwise false.
      */
     private static boolean approximatelyEqual(double desiredValue, double actualValue, double tolerancePercentage) {
-        double diff = Math.abs(desiredValue - actualValue);         //  1000 - 950  = 50
-        double tolerance = tolerancePercentage / 100 * desiredValue;  //  20/100*1000 = 200
-        return diff < tolerance;                                   //  50<200      = true
+        // Get the absolute difference of the values.
+        double diff = Math.abs(desiredValue - actualValue);
+        // Calculate tolerance.
+        double tolerance = tolerancePercentage / 100 * desiredValue;
+        // Return whether the absolute difference is smaller than the tolerance value or not.
+        return diff < tolerance;
     }
 
     @Override
     public Velocities act() {
-        double lLux = getSensors().getLightL().getLux();
-        double rLux = getSensors().getLightR().getLux();
-        double rLum = SensorsInterpreter.luxToLuminance(rLux);
-        double lLum = SensorsInterpreter.luxToLuminance(lLux);
-
+        // Get right and left luminance and use them to get currentLuminance too.
+        double rLum = SensorsInterpreter.luxToLuminance(getSensors().getLightR().getLux());
+        double lLum = SensorsInterpreter.luxToLuminance(getSensors().getLightL().getLux());
         double currentLuminance = (rLum + lLum) / 2;
 
-        // Set the previous luminance.
         if (prevLuminance == 0)
+            // Set the previous luminance.
             prevLuminance = currentLuminance;
-            // If the luminance is decreasing, tilt a bit, because the robot is probably moving in the opposite
-            // direction.
         else if (prevLuminance > currentLuminance) {
+            // If the luminance is decreasing, tilt a bit,
+            // because the robot may be moving in the opposite direction.
             prevLuminance = currentLuminance;
             return new Velocities(TRANSLATIONAL_VELOCITY, Math.PI / 7);
         }
 
-        // Τurn towards light and move only if the right luminance is almost equal with the left.
+        // Set rotational velocity, depending on the left and right luminance and init translational velocity.
         double rotationalVelocity = (lLum - rLum) * Math.PI * 4;
-        double translational;
+        double translationalVelocity = 0;
+
+        // Τurn towards light and move only if the right luminance is almost equal with the left.
         if (approximatelyEqual(lLum, rLum, .4) || approximatelyEqual(rLum, lLum, .4))
-            translational = TRANSLATIONAL_VELOCITY;
+            translationalVelocity = TRANSLATIONAL_VELOCITY;
         else {
             // Rotate a bit faster.
             rotationalVelocity *= 4;
-            translational = 0;
         }
 
-        return new Velocities(translational, rotationalVelocity);
+        return new Velocities(translationalVelocity, rotationalVelocity);
     }
 
     @Override
     public boolean isActive() {
+        // Always enable, since this is the lowest behavior of the subsumption hierarchy.
         return true;
     }
 }
