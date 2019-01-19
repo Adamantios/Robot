@@ -4,17 +4,24 @@ import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 import simbad.sim.*;
 
+import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
+import java.awt.*;
 
 
 class Robot extends Agent {
+    private static final int ODOMETER_CHECK_INTERVAL = 100;
     private final Sensors sensors;
     private Behavior[] behaviors;
     private boolean[][] subsumes;
     private int currentBehaviorIndex;
+    private float timesRotationChanged;
 
     Robot(Vector3d position) {
         super(position, "Ma.Pa.");
+        // Set robot's color.
+        setColor(new Color3f(new Color(65, 66, 136)));
+        timesRotationChanged = 0;
 
         // Add sonars.
         RangeSensorBelt sonars = RobotFactory.addSonarBeltSensor(this, 12);
@@ -58,6 +65,9 @@ class Robot extends Agent {
 
         // Set the robot's radius for the sensors interpreting calculations.
         SensorsInterpreter.setRobotRadius(this.getRadius());
+
+        // Set rotation changed times to 0.
+        timesRotationChanged = 0;
     }
 
     @Override
@@ -74,7 +84,15 @@ class Robot extends Agent {
             Avoidance.setClockwise(false);
     }
 
-    public void performBehavior() {
+    private void checkOdometer() {
+        if (getOdometer() >= (timesRotationChanged + 1) * ODOMETER_CHECK_INTERVAL
+                && getOdometer() % ODOMETER_CHECK_INTERVAL <= .5) {
+            Avoidance.reverseRotation();
+            timesRotationChanged++;
+        }
+    }
+
+    private void chooseBehavior() {
         // Create array to keep the activation state of the behaviors.
         boolean[] isActive = new boolean[behaviors.length];
 
@@ -118,5 +136,10 @@ class Robot extends Agent {
                 // Reset current behavior's index if necessary.
                 currentBehaviorIndex = (currentBehaviorIndex + 1) % behaviors.length;
         }
+    }
+
+    public void performBehavior() {
+        checkOdometer();
+        chooseBehavior();
     }
 }

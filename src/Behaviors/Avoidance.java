@@ -29,6 +29,10 @@ public class Avoidance extends Behavior {
         Avoidance.clockwise = clockwise;
     }
 
+    public static void reverseRotation() {
+        Avoidance.clockwise = !clockwise;
+    }
+
     /**
      * Finds the shortest angle from the given one.
      * <p>
