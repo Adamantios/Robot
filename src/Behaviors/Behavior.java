@@ -26,9 +26,4 @@ public abstract class Behavior {
     Sensors getSensors() {
         return sensors;
     }
-
-    @Override
-    public String toString() {
-        return "[Behavior: " + super.toString() + "]";
-    }
 }

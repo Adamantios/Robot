@@ -5,8 +5,6 @@ import Utilities.Sensors;
 import Utilities.Velocities;
 import simbad.sim.*;
 
-import java.util.Arrays;
-
 
 public class Robot extends Agent {
     private Behavior[] behaviors;
@@ -106,13 +104,5 @@ public class Robot extends Agent {
                 currentBehaviorIndex = (currentBehaviorIndex + 1) % behaviors.length;
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return "[BehaviorBasedAgent: behaviors=" + Arrays.toString(behaviors) + ", " +
-                "subsumes=" + Arrays.deepToString(subsumes) + ", " +
-                "currentBehaviorIndex=" + currentBehaviorIndex + ", " +
-                "sensors=" + sensors + ", " + super.toString() + "]";
     }
 }

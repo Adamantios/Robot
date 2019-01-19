@@ -66,12 +66,4 @@ public class LightSeeking extends Behavior {
     public boolean isActive() {
         return true;
     }
-
-    /**
-     * Returns a description of this behavior.
-     */
-    @Override
-    public String toString() {
-        return "[LightSeeking: " + super.toString() + "]";
-    }
 }

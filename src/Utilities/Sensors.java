@@ -39,12 +39,4 @@ public class Sensors {
     public LineSensor getLine() {
         return line;
     }
-
-    @Override
-    public String toString() {
-        return "[Sensors: sonars=" + sonars + ", " +
-                "bumpers=" + bumpers + ", " +
-                "lightSensorLeft=" + lLight + ", " +
-                "lightSensorRight=" + rLight + "]";
-    }
 }

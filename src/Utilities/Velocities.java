@@ -16,10 +16,4 @@ public class Velocities {
     public double getRotationalVelocity() {
         return rotationalVelocity;
     }
-
-    @Override
-    public String toString() {
-        return "[Velocities: translationalVelocity=" + translationalVelocity
-                + ", rotationalVelocity=" + rotationalVelocity + "]";
-    }
 }
