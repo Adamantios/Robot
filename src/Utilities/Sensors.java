@@ -5,10 +5,9 @@ import simbad.sim.LineSensor;
 import simbad.sim.RangeSensorBelt;
 
 public class Sensors {
-    private RangeSensorBelt sonars, bumpers;
-    private LightSensor rLight;
-    private LightSensor lLight;
-    private LineSensor line;
+    private final RangeSensorBelt sonars, bumpers;
+    private final LightSensor rLight, lLight;
+    private final LineSensor line;
 
     public Sensors(RangeSensorBelt sonars, RangeSensorBelt bumpers, LightSensor rLight, LightSensor lLight,
                    LineSensor line) {

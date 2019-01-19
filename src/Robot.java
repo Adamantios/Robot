@@ -1,20 +1,20 @@
-import javax.vecmath.Vector3d;
-
 import Behaviors.*;
 import Utilities.Sensors;
 import Utilities.SensorsInterpreter;
 import Utilities.Velocities;
 import simbad.sim.*;
 
+import javax.vecmath.Vector3d;
 
-public class Robot extends Agent {
+
+class Robot extends Agent {
+    private final Sensors sensors;
     private Behavior[] behaviors;
     private boolean[][] subsumes;
     private int currentBehaviorIndex;
-    private Sensors sensors;
 
-    Robot(Vector3d position, String name) {
-        super(position, name);
+    Robot(Vector3d position) {
+        super(position, "Ma.Pa.");
 
         // Add sonars.
         RangeSensorBelt sonars = RobotFactory.addSonarBeltSensor(this, 12);

@@ -1,8 +1,8 @@
 package Utilities;
 
 public class Velocities {
-    private double translationalVelocity;
-    private double rotationalVelocity;
+    private final double translationalVelocity;
+    private final double rotationalVelocity;
 
     public Velocities(double translationalVelocity, double rotationalVelocity) {
         this.translationalVelocity = translationalVelocity;

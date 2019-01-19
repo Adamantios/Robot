@@ -7,7 +7,7 @@ public abstract class Behavior {
     // The robot's translational velocity to be used.
     static final double TRANSLATIONAL_VELOCITY = 0.35;
     // The robot's sensors.
-    private Sensors sensors;
+    private final Sensors sensors;
 
     /**
      * Constructor.
