@@ -4,10 +4,10 @@ import Utilities.Sensors;
 import Utilities.Velocities;
 
 public abstract class Behavior {
-    // The robot's sensors.
-    private Sensors sensors;
     // The robot's translational velocity to be used.
     static final double TRANSLATIONAL_VELOCITY = 0.35;
+    // The robot's sensors.
+    private Sensors sensors;
 
     /**
      * Constructor.
