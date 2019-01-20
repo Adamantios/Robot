@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ReachGoal extends Behavior {
     private static final double LUMINANCE_STOP_POINT = 0.91;
-    private Agent robot;
-    private List<Color> colors;
+    private final Agent robot;
+    private final List<Color> colors;
     private int colorCounter;
 
     public ReachGoal(Sensors sensors, Agent robot) {
