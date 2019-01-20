@@ -145,7 +145,7 @@ class Robot extends Agent {
     }
 
     public void performBehavior() {
-        checkOdometer();
+//        checkOdometer();
         chooseBehavior();
     }
 }
