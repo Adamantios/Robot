@@ -54,7 +54,7 @@ class Robot extends Agent {
     private void initState() {
         // Create behaviors.
         behaviors = new Behavior[]{
-                new ReachGoal(sensors),
+                new ReachGoal(sensors, this),
                 new Avoidance(sensors),
                 new LineFollowing(sensors),
                 new LightSeeking(sensors)
