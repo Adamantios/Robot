@@ -8,20 +8,26 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
 import java.awt.*;
 
+import static Utilities.Helpers.approximatelyEqual;
+
 
 class Robot extends Agent {
-    private static final int ODOMETER_CHECK_INTERVAL = 70;
     private final Sensors sensors;
     private Behavior[] behaviors;
     private boolean[][] subsumes;
     private int currentBehaviorIndex;
-    private float timesRotationChanged;
+    private boolean checkCompleted;
+    private int checkTurnCount;
+    private double maxLuminanceDetected;
 
     Robot(Vector3d position) {
         super(position, "Ma.Pa.");
+        checkCompleted = false;
+        checkTurnCount = 80;
+        maxLuminanceDetected = 0;
+
         // Set robot's color.
         setColor(new Color3f(new Color(63, 69, 136)));
-        timesRotationChanged = 0;
 
         // Add sonars.
         RangeSensorBelt sonars = RobotFactory.addSonarBeltSensor(this, 12);
@@ -66,32 +72,73 @@ class Robot extends Agent {
         // Set the robot's radius for the sensors interpreting calculations.
         SensorsInterpreter.setRobotRadius(this.getRadius());
 
-        // Set rotation changed times to 0.
-        timesRotationChanged = 0;
+        // Set initial values for starting check.
+        checkCompleted = false;
+        checkTurnCount = 80;
+        maxLuminanceDetected = 0;
     }
 
     @Override
     protected void initBehavior() {
         // Initialise behaviors and subsumption matrix.
         initState();
-
-        // Set anticlockwise rotation if the lux and the distance on the right are bigger.
-        double lLux = sensors.getLightL().getLux();
-        double rLux = sensors.getLightR().getLux();
-        double front_right = sensors.getSonars().getFrontRightQuadrantMeasurement();
-        double front_left = sensors.getSonars().getFrontLeftQuadrantMeasurement();
-        if (front_right > front_left && rLux > lLux)
-            Avoidance.setClockwise(false);
     }
 
     /**
-     * Checks odometer and reverses rotation if a certain interval has been reached.
+     * Compares the current luminance with the maximum detected, storing the maximum every time
+     * and sets rotational velocity to pi/2.
      */
-    private void checkOdometer() {
-        if (getOdometer() >= (timesRotationChanged + 1) * ODOMETER_CHECK_INTERVAL
-                && getOdometer() % ODOMETER_CHECK_INTERVAL <= .5) {
-            Avoidance.reverseRotation();
-            timesRotationChanged++;
+    private void searchForLuminance() {
+        // Set Velocities.
+        this.setTranslationalVelocity(0);
+        this.setRotationalVelocity(Math.PI / 2);
+
+        // Get current luminance.
+        double currentLuminance = SensorsInterpreter.luxToLuminance(sensors.getLightR().getLux(),
+                sensors.getLightL().getLux());
+
+        // Store the maximum luminance.
+        if (maxLuminanceDetected < currentLuminance)
+            maxLuminanceDetected = currentLuminance;
+
+        // Increase the check's turn counter.
+        checkTurnCount--;
+    }
+
+    /**
+     * Sets rotational velocity to pi/2 if the maximum luminance is not approximately equal with the current one.
+     * <p>
+     * Otherwise, flags the initial check as completed.
+     */
+    private void turnTowardsLight() {
+        // Get current luminance.
+        double currentLuminance = SensorsInterpreter.luxToLuminance(sensors.getLightR().getLux(),
+                sensors.getLightL().getLux());
+
+        if (approximatelyEqual(currentLuminance, maxLuminanceDetected)
+                || approximatelyEqual(maxLuminanceDetected, currentLuminance))
+            checkCompleted = true;
+        else
+            this.setRotationalVelocity(Math.PI / 2);
+    }
+
+    /**
+     * Rotates the robot, locates where the maximum luminance is coming from and points there.
+     */
+    private void performInitialCheck() {
+        if (checkTurnCount > 0)
+            // Check for maximum luminance in the room.
+            searchForLuminance();
+
+        else if (!checkCompleted && maxLuminanceDetected > 0) {
+            // Turn towards the location where the maximum luminance was detected.
+            turnTowardsLight();
+
+            // Set anticlockwise rotation if the luminance on the right is less than the left.
+            if (sensors.getLightR().getAverageLuminance() < sensors.getLightL().getAverageLuminance())
+                Avoidance.setClockwise(false);
+            else
+                Avoidance.setClockwise(true);
         }
     }
 
@@ -142,7 +189,9 @@ class Robot extends Agent {
     }
 
     public void performBehavior() {
-//        checkOdometer();
-        chooseBehavior();
+        performInitialCheck();
+
+        if (checkCompleted)
+            chooseBehavior();
     }
 }
