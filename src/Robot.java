@@ -84,6 +84,9 @@ class Robot extends Agent {
             Avoidance.setClockwise(false);
     }
 
+    /**
+     * Checks odometer and reverses rotation if a certain interval has been reached.
+     */
     private void checkOdometer() {
         if (getOdometer() >= (timesRotationChanged + 1) * ODOMETER_CHECK_INTERVAL
                 && getOdometer() % ODOMETER_CHECK_INTERVAL <= .5) {
@@ -92,6 +95,9 @@ class Robot extends Agent {
         }
     }
 
+    /**
+     * Chooses and runs one of the behaviors depending on their states.
+     */
     private void chooseBehavior() {
         // Create array to keep the activation state of the behaviors.
         boolean[] isActive = new boolean[behaviors.length];
