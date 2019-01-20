@@ -30,7 +30,7 @@ public class LightSeeking extends Behavior {
         double translationalVelocity = 0;
 
         // Τurn towards light and move only if the right luminance is almost equal with the left.
-        if (approximatelyEqual(lLum, rLum, .2F) || approximatelyEqual(rLum, lLum, .2F)) {
+        if (approximatelyEqual(lLum, rLum, .2F)) {
             translationalVelocity = TRANSLATIONAL_VELOCITY;
 
             if (minLuminance > currentLuminance) {
