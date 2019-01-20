@@ -20,7 +20,7 @@ class Robot extends Agent {
     Robot(Vector3d position) {
         super(position, "Ma.Pa.");
         // Set robot's color.
-        setColor(new Color3f(new Color(65, 66, 136)));
+        setColor(new Color3f(new Color(63, 69, 136)));
         timesRotationChanged = 0;
 
         // Add sonars.
