@@ -125,9 +125,6 @@ class Robot extends Agent {
 
             if (runCurrentBehavior) {
                 if (currentBehaviorIndex < behaviors.length) {
-//                    TODO remove
-//                    System.out.println("Running behavior " + behaviors[currentBehaviorIndex].toString());
-
                     // Run current behavior.
                     Velocities newVelocities = behaviors[currentBehaviorIndex].act();
                     this.setTranslationalVelocity(newVelocities.getTranslationalVelocity());
