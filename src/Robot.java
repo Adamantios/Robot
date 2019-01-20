@@ -115,8 +115,8 @@ class Robot extends Agent {
         double currentLuminance = SensorsInterpreter.luxToLuminance(sensors.getLightR().getLux(),
                 sensors.getLightL().getLux());
 
-        if (approximatelyEqual(currentLuminance, maxLuminanceDetected, .2F)
-                || approximatelyEqual(maxLuminanceDetected, currentLuminance, .2F))
+        if (approximatelyEqual(currentLuminance, maxLuminanceDetected, .005F)
+                || approximatelyEqual(maxLuminanceDetected, currentLuminance, .005F))
             checkCompleted = true;
         else
             this.setRotationalVelocity(Math.PI / 2);
