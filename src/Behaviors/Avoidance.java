@@ -13,7 +13,7 @@ public class Avoidance extends Behavior {
     private static final double K2 = 0.5;
     private static final double K3 = 1;
     private static final double START_DISTANCE = .4;
-    private static final double SAFETY_DISTANCE = .9;
+    private static final double SAFETY_DISTANCE = .88;
     private static final int MIN_AVOIDANCE_STEPS = 37;
 
     private static boolean clockwise;
