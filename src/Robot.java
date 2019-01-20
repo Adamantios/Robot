@@ -27,7 +27,7 @@ class Robot extends Agent {
         maxLuminanceDetected = 0;
 
         // Set robot's color.
-        setColor(new Color3f(new Color(63, 69, 136)));
+        setColor(new Color3f(new Color(255, 53, 162)));
 
         // Add sonars.
         RangeSensorBelt sonars = RobotFactory.addSonarBeltSensor(this, 12);
