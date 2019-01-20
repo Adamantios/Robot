@@ -14,15 +14,15 @@ public class Avoidance extends Behavior {
     private static final double K3 = 1;
     private static final double START_DISTANCE = .4;
     private static final double SAFETY_DISTANCE = .9;
+    private static final int MIN_AVOIDANCE_STEPS = 37;
 
     private static boolean clockwise;
-
-    private boolean beganAvoidance;
+    private int avoidanceCounter;
 
     public Avoidance(Sensors sensors) {
         super(sensors);
         clockwise = true;
-        beganAvoidance = false;
+        avoidanceCounter = 0;
     }
 
     public static void setClockwise(boolean clockwise) {
@@ -96,43 +96,39 @@ public class Avoidance extends Behavior {
         if (getSensors().getBumpers().oneHasHit())
             return true;
 
-        // Get the right and left halfs of the line sensor.
-        SensorsInterpreter.LineSensorHalfs lineSensorHalfs =
-                new SensorsInterpreter.LineSensorHalfs(getSensors().getLine());
-        int right = lineSensorHalfs.getRight();
-        int left = lineSensorHalfs.getLeft();
-
         // Get sonars.
         RangeSensorBelt sonars = getSensors().getSonars();
 
-        // Do not avoid obstacles if there is free space from the line's direction.
-        for (int i = 0; i < getSensors().getLine().getNumSensors(); i++) {
-            if (left > 0 && sonars.getLeftQuadrantMeasurement() == 0 ||
-                    right > 0 && sonars.getRightQuadrantMeasurement() == 0)
-                return false;
-        }
-
         // Get the index of the sonar with the minimum distance from an obstacle.
         int min = SensorsInterpreter.getMinSonarIndex(sonars);
-        if (sonars.getMeasurement(min) <= START_DISTANCE && !beganAvoidance) {
+        if (sonars.getMeasurement(min) <= START_DISTANCE && avoidanceCounter == 0) {
             // Set rotation depending on the angle in which the robot has hit the obstacle.
-            clockwise = min == 4 || min <= 3 || min >= 8;
+            clockwise = !(min < 7);
 
-            // Activate behavior and set the avoidance flag to true.
-            beganAvoidance = true;
+            if (min == 0)
+                if (sonars.getMeasurement(11) > sonars.getMeasurement(1))
+                    // If the front sensor was hit, set rotation depending on the front left and front right sensors.
+                    clockwise = false;
+
+            // Activate avoidance behavior and increase the avoidance counter.
+            avoidanceCounter++;
             return true;
-        } else if (beganAvoidance) {
+        } else if (avoidanceCounter > 0) {
             // If any line sensor has been hit, do not activate avoidance behavior, otherwise enable.
             for (int i = 0; i < getSensors().getLine().getNumSensors(); i++) {
-                if (getSensors().getLine().hasHit(i)) {
-                    beganAvoidance = false;
+                if (getSensors().getLine().hasHit(i) && avoidanceCounter > MIN_AVOIDANCE_STEPS) {
+                    // Deactivate avoidance behavior and reset the avoidance counter.
+                    avoidanceCounter = 0;
                     return false;
                 }
             }
+            // Activate avoidance behavior and increase the avoidance counter.
+            avoidanceCounter++;
             return true;
         }
 
-        // If none of the above happens, do not activate avoidance behavior.
+        // If none of the above happens, do not activate avoidance behavior and reset the avoidance counter.
+        avoidanceCounter = 0;
         return false;
     }
 }
