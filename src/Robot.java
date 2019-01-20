@@ -10,7 +10,7 @@ import java.awt.*;
 
 
 class Robot extends Agent {
-    private static final int ODOMETER_CHECK_INTERVAL = 100;
+    private static final int ODOMETER_CHECK_INTERVAL = 70;
     private final Sensors sensors;
     private Behavior[] behaviors;
     private boolean[][] subsumes;
