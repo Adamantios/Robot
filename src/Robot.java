@@ -21,6 +21,7 @@ class Robot extends Agent {
     private double maxLuminanceDetected;
 
     Robot(Vector3d position) {
+        // Ma.Pa. is an acronym for Manos and Panos, the developers.
         super(position, "Ma.Pa.");
         checkCompleted = false;
         checkTurnCount = 80;
