@@ -29,6 +29,9 @@ public class Avoidance extends Behavior {
         Avoidance.clockwise = clockwise;
     }
 
+    /**
+     * Reverses the rotation's direction.
+     */
     public static void reverseRotation() {
         Avoidance.clockwise = !clockwise;
     }
