@@ -109,7 +109,12 @@ public class Avoidance extends Behavior {
                 return false;
         }
 
-        if (SensorsInterpreter.getMinSonarDist(sonars) <= START_DISTANCE && !beganAvoidance) {
+        // Get the index of the sonar with the minimum distance from an obstacle.
+        int min = SensorsInterpreter.getMinSonarIndex(sonars);
+        if (sonars.getMeasurement(min) <= START_DISTANCE && !beganAvoidance) {
+            // Set rotation depending on the angle in which the robot has hit the obstacle.
+            clockwise = min == 4 || min <= 3 || min >= 8;
+
             // Activate behavior and set the avoidance flag to true.
             beganAvoidance = true;
             return true;
